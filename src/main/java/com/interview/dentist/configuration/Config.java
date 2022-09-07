@@ -29,10 +29,10 @@ public class Config {
     private void fillWithTestData() {
 
         Patient patient1 = new Patient("Petar", "Petrovic", "1305997850154",
-                "123456789", "dunjastojanov2@gmail.com");
+                "123456789", "dunjastojanov2+petar.petorvic@gmail.com");
         patientRepository.save(patient1);
         Patient patient2 = new Patient("Milica", "Milic", "1234567891234",
-                "987654321", "dunjastojanov2@gmail.com");
+                "987654321", "dunjastojanov2+milica.milic@gmail.com");
         patientRepository.save(patient2);
 
         appointmentRepository.save(new Appointment(LocalDateTime.of(2022, Month.OCTOBER, 3, 10, 0, 0), 60, "Čišćenje kamenca", patient1));

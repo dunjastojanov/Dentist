@@ -4,13 +4,11 @@ import com.interview.dentist.exceptions.IncorrectPassword;
 import com.interview.dentist.exceptions.PatientNotFound;
 import com.interview.dentist.patient.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
+@CrossOrigin(origins = "*")
 public class LoginController {
     private final LoginService loginService;
 

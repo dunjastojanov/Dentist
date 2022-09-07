@@ -67,6 +67,7 @@ export function LoginView() {
         }
 
         axios.post(backlink+"login/dentist", dto).then(res=>{
+            localStorage.setItem("type", "dentist");
             window.location.href = frontlink + "dentist"
         }).catch(err=> {
             console.log(err);
@@ -80,6 +81,8 @@ export function LoginView() {
         }
 
         axios.post(backlink+"login/patient", dto).then(res=>{
+            localStorage.setItem("type", "patient");
+            localStorage.setItem("id", res.data.id);
             window.location.href = frontlink + "patient/" + res.data.id
         }).catch(err=> {
             console.log(err);

@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {backlink, frontlink} from "./Consts";
+import {backlink} from "./Consts";
 import {Calendar} from "./Calendar";
 import Button from "react-bootstrap/Button";
 import {AppointmentCards} from "./AppointmentCards";
@@ -9,6 +9,7 @@ import {Form, Modal} from "react-bootstrap";
 import {AppointmentForm} from "./AppointmentForm";
 import {AddAppointmentError} from "./AddAppointmentError";
 import {CancelAppointmentError} from "./CancelAppointmentError";
+import {logOut} from "./LogOut";
 
 export function PatientView() {
     const {id} = useParams();
@@ -84,9 +85,9 @@ export function PatientView() {
     const [showError, setShowError] = useState(false);
     const [show, setShow] = useState(false);
 
+    let allowed = localStorage.getItem("type") === "patient" && localStorage.getItem("id") === id;
 
-
-    return (
+    let html = <>
         <div className="d-flex p-3" style={{
             backgroundImage: "linear-gradient(0deg, #08AEEA 0%, #2AF598 100%)"
         }}>
@@ -99,7 +100,7 @@ export function PatientView() {
                                 onClick={() => setShow(true)}>
                             Zakaži novi termin</Button>
                         <Button variant="primary" className="ms-2"
-                                onClick={() => window.location.href = frontlink}>
+                                onClick={() => logOut()}>
                             Odjavi se</Button>
                     </div>
                     <AppointmentCards cancelAppointment={cancelAppointment} appointments={appointments}/>
@@ -131,5 +132,9 @@ export function PatientView() {
             <CancelAppointmentError show={showCancelError} setShow={setShowCancelError}/>
 
         </div>
-    )
+    </>;
+    if (allowed) {
+        return html
+    }
+
 }

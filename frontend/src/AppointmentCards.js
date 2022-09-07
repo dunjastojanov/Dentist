@@ -16,6 +16,8 @@ export function AppointmentCards({appointments, cancelAppointment}) {
                             <div>Datum: {getAppointmentDateString(appointment.startTime)}</div>
                             <div>Vreme: {getAppointmentTimeString(appointment.startTime)}</div>
                             <div>Trajanje: {appointment.duration} minuta</div>
+                            <div>Tip: {appointment.type}</div>
+                            <div>Email pacijenta: {appointment.patient.email}</div>
                         </div>
 
                         <Button variant="primary" className="ms-auto"

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {backlink, frontlink} from "./Consts";
+import {backlink} from "./Consts";
 import {Form, Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Collapse from 'react-bootstrap/Collapse';
@@ -10,6 +10,7 @@ import {AddAppointmentError} from "./AddAppointmentError";
 import {CancelAppointmentError} from "./CancelAppointmentError";
 import {AppointmentForm} from "./AppointmentForm";
 import {NewPatientForm} from "./NewPatientForm";
+import {logOut} from "./LogOut";
 
 export function DentistView() {
 
@@ -50,7 +51,7 @@ export function DentistView() {
                         start: start,
                         end: end,
                         id: a.id,
-                        title: a.patient.firstName + " " + a.patient.lastName
+                        title: a.type + ": "+ a.patient.firstName + " " + a.patient.lastName
                     })
                 }
                 setEvents(newEvents);
@@ -128,7 +129,9 @@ export function DentistView() {
     const [addNewPatient, setAddNewPatient] = useState(false);
     const [showError, setShowError] = useState(false);
 
-    return (
+    let allowed = localStorage.getItem("type") === "dentist";
+
+    let html = <>
         <div className="d-flex p-3" style={{
             backgroundImage: "linear-gradient(0deg, #08AEEA 0%, #2AF598 100%)"
         }}>
@@ -142,7 +145,7 @@ export function DentistView() {
                                 onClick={() => setShow(true)}>
                             Zakaži novi termin</Button>
                         <Button variant="primary" className="ms-2"
-                                onClick={() => window.location.href = frontlink}>
+                                onClick={() => logOut()}>
                             Odjavi se</Button>
                     </div>
                     <AppointmentCards cancelAppointment={cancelAppointment} appointments={appointments}/>
@@ -205,8 +208,10 @@ export function DentistView() {
 
             </div>
         </div>
+    </>;
+    if (allowed) {
+        return html;
+    }
 
-
-    )
 }
 
