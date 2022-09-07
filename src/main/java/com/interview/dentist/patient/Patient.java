@@ -1,9 +1,12 @@
 package com.interview.dentist.patient;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import javax.persistence.*;
 
 @Entity
 @Table
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Patient {
     @Id
     @SequenceGenerator(
@@ -21,22 +24,26 @@ public class Patient {
     private String jmbg;
     private String lbo;
 
+    private String email;
+
     public Patient() {
     }
 
-    public Patient(Long id, String firstName, String lastName, String jmbg, String lbo) {
+    public Patient(Long id, String firstName, String lastName, String jmbg, String lbo, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.jmbg = jmbg;
         this.lbo = lbo;
+        this.email = email;
     }
 
-    public Patient(String firstName, String lastName, String jmbg, String lbo) {
+    public Patient(String firstName, String lastName, String jmbg, String lbo, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.jmbg = jmbg;
         this.lbo = lbo;
+        this.email = email;
     }
 
     public Long getId() {
@@ -77,5 +84,13 @@ public class Patient {
 
     public void setLbo(String lbo) {
         this.lbo = lbo;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
