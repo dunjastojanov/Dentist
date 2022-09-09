@@ -1,30 +1,28 @@
 package com.interview.dentist.login;
 
-import com.interview.dentist.exceptions.IncorrectPassword;
-import com.interview.dentist.exceptions.PatientNotFound;
-import com.interview.dentist.patient.Patient;
-import com.interview.dentist.patient.PatientService;
+import com.interview.dentist.user.AppUser;
+import com.interview.dentist.user.AppUserService;
+import com.interview.dentist.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 public class LoginService {
-    private final PatientService patientService;
+    private final AppUserService appUserService;
+    private final UserService userService;
 
     @Autowired
-    public LoginService(PatientService patientService) {
-        this.patientService = patientService;
+    public LoginService(AppUserService appUserService, UserService userService) {
+        this.appUserService = appUserService;
+        this.userService = userService;
     }
 
-    public Patient patientLogin(LoginDto dto) throws PatientNotFound {
-        return patientService.getPatientByCredentials(dto.getJmbg(), dto.getLbo());
+    public UserDetails getUser(String username) {
+        return userService.loadUserByUsername(username);
     }
 
-    public boolean dentistLogin(LoginDentistDto dto) throws IncorrectPassword{
-        if (Objects.equals(dto.getPassword(), "123")) {
-            return true;
-        } else throw new IncorrectPassword();
+    public AppUser getPatient(String username) {
+        return appUserService.getUserByEmail(username);
     }
 }

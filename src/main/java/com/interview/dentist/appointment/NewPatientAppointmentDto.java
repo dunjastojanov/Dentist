@@ -12,13 +12,13 @@ public class NewPatientAppointmentDto {
     private String jmbg;
     private String lbo;
     private String email;
-
     private String type;
+    private String password;
 
     public NewPatientAppointmentDto() {
     }
 
-    public NewPatientAppointmentDto(int day, int month, int year, int hour, int minute, int duration, String firstName, String lastName, String jmbg, String lbo, String email, String type) {
+    public NewPatientAppointmentDto(int day, int month, int year, int hour, int minute, int duration, String firstName, String lastName, String jmbg, String lbo, String email, String type, String password) {
         this.day = day;
         this.month = month;
         this.year = year;
@@ -31,6 +31,7 @@ public class NewPatientAppointmentDto {
         this.lbo = lbo;
         this.email = email;
         this.type = type;
+        this.password = password;
     }
 
     public String getType() {
@@ -39,6 +40,14 @@ public class NewPatientAppointmentDto {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getDay() {

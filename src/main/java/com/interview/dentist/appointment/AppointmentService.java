@@ -2,9 +2,12 @@ package com.interview.dentist.appointment;
 
 import com.interview.dentist.email.EmailSenderService;
 import com.interview.dentist.exceptions.AppointmentNotAvailable;
-import com.interview.dentist.patient.Patient;
-import com.interview.dentist.patient.PatientService;
+import com.interview.dentist.user.AppUser;
+import com.interview.dentist.user.AppUserService;
+import com.interview.dentist.role.Role;
+import com.interview.dentist.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -16,14 +19,19 @@ import java.util.List;
 @Service
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
-    private final PatientService patientService;
+    private final AppUserService appUserService;
     private final EmailSenderService emailSenderService;
 
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
-    public AppointmentService(AppointmentRepository appointmentRepository, PatientService patientService, EmailSenderService emailSenderService) {
+    public AppointmentService(AppointmentRepository appointmentRepository, AppUserService appUserService, EmailSenderService emailSenderService, RoleRepository roleRepository) {
         this.appointmentRepository = appointmentRepository;
-        this.patientService = patientService;
+        this.appUserService = appUserService;
         this.emailSenderService = emailSenderService;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public List<Appointment> getAllAppointments() {
@@ -35,7 +43,7 @@ public class AppointmentService {
     }
 
     public Long addAppointment(AppointmentDto dto) throws AppointmentNotAvailable {
-        Appointment appointment = new Appointment(LocalDateTime.of(dto.getYear(), Month.of(dto.getMonth()), dto.getDay(), dto.getHour(), dto.getMinute(), 0), dto.getDuration(), dto.getType(), patientService.getById(dto.getPatientId())
+        Appointment appointment = new Appointment(LocalDateTime.of(dto.getYear(), Month.of(dto.getMonth()), dto.getDay(), dto.getHour(), dto.getMinute(), 0), dto.getDuration(), dto.getType(), appUserService.getById(dto.getPatientId())
 
         );
         if (isAppointmentAvailable(appointment)) {
@@ -76,10 +84,15 @@ public class AppointmentService {
     }
 
     public Long addAppointmentWithNewPatient(NewPatientAppointmentDto dto) {
-        Patient patient = new Patient(dto.getFirstName(), dto.getLastName(), dto.getJmbg(), dto.getLbo(), dto.getEmail());
-        patientService.addPatient(patient);
+        AppUser appUser = new AppUser(dto.getFirstName(), dto.getLastName(), dto.getJmbg(), dto.getLbo(), dto.getEmail(), passwordEncoder.encode(dto.getPassword()));
+        Role role = new Role("patient");
+        roleRepository.save(role);
+        appUser.getRoles().add(role);
 
-        Appointment appointment = new Appointment(LocalDateTime.of(dto.getYear(), Month.of(dto.getMonth()), dto.getDay(), dto.getHour(), dto.getMinute(), 0), dto.getDuration(), dto.getType(), patient);
+
+        appUserService.addUser(appUser);
+
+        Appointment appointment = new Appointment(LocalDateTime.of(dto.getYear(), Month.of(dto.getMonth()), dto.getDay(), dto.getHour(), dto.getMinute(), 0), dto.getDuration(), dto.getType(), appUser);
         if (isAppointmentAvailable(appointment)) {
             appointmentRepository.save(appointment);
             sendConformationEmail(appointment);

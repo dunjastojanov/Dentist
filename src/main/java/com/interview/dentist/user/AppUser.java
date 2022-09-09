@@ -1,58 +1,53 @@
-package com.interview.dentist.patient;
+package com.interview.dentist.user;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.interview.dentist.role.Role;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Table
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class Patient {
+public class AppUser {
+
     @Id
-    @SequenceGenerator(
-            name="patient_sequence",
-            sequenceName = "patient_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "patient_sequence"
-    )
+    @SequenceGenerator(name = "app_user_sequence", sequenceName = "app_user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_sequence")
     private Long id;
+    private String email;
+    private String password;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles = new ArrayList<>();
     private String firstName;
     private String lastName;
     private String jmbg;
     private String lbo;
 
-    private String email;
-
-    public Patient() {
+    public AppUser() {
     }
 
-    public Patient(Long id, String firstName, String lastName, String jmbg, String lbo, String email) {
+    public AppUser(Long id, String firstName, String lastName, String jmbg, String lbo, String email, String password) {
         this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jmbg = jmbg;
+        this.lbo = lbo;
+
+    }
+
+    public AppUser(String firstName, String lastName, String jmbg, String lbo, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.jmbg = jmbg;
         this.lbo = lbo;
         this.email = email;
+        this.password = password;
     }
 
-    public Patient(String firstName, String lastName, String jmbg, String lbo, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.jmbg = jmbg;
-        this.lbo = lbo;
-        this.email = email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -86,11 +81,35 @@ public class Patient {
         this.lbo = lbo;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

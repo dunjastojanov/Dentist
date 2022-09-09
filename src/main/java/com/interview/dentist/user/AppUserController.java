@@ -1,4 +1,4 @@
-package com.interview.dentist.patient;
+package com.interview.dentist.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,17 +11,17 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/patient")
-public class PatientController {
+public class AppUserController {
 
-    private final PatientService patientService;
+    private final AppUserService appUserService;
 
     @Autowired
-    public PatientController(PatientService patientService) {
-        this.patientService = patientService;
+    public AppUserController(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     @GetMapping("/all")
-    public List<Patient> getAll() {
-        return patientService.getAll();
+    public List<AppUser> getAll() {
+        return appUserService.getAll();
     }
 }

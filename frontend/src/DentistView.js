@@ -28,7 +28,8 @@ export function DentistView() {
         lastName: "",
         lbo: "",
         jmbg: "",
-        email: ""
+        email: "",
+        password: ""
     });
 
     const setField = (field, value) => {
@@ -51,7 +52,7 @@ export function DentistView() {
                         start: start,
                         end: end,
                         id: a.id,
-                        title: a.type + ": "+ a.patient.firstName + " " + a.patient.lastName
+                        title: a.type + ": "+ a.appUser.firstName + " " + a.appUser.lastName
                     })
                 }
                 setEvents(newEvents);
@@ -62,7 +63,7 @@ export function DentistView() {
     };
 
     const fetchPatients = () => {
-        axios.get(backlink + "patient/all")
+        axios.get(backlink + "appUser/all")
             .then(res => {
                 setPatients(res.data);
             })
@@ -99,7 +100,8 @@ export function DentistView() {
                 lastName: formData.lastName,
                 jmbg: formData.jmbg,
                 lbo: formData.lbo,
-                email: formData.email
+                email: formData.email,
+                password: formData.password
             }
             link += "appointment/addWithNewPatient";
         } else {
@@ -129,7 +131,7 @@ export function DentistView() {
     const [addNewPatient, setAddNewPatient] = useState(false);
     const [showError, setShowError] = useState(false);
 
-    let allowed = localStorage.getItem("type") === "dentist";
+    let allowed = localStorage.getItem("role") === "dentist";
 
     let html = <>
         <div className="d-flex p-3" style={{
@@ -177,15 +179,15 @@ export function DentistView() {
                             </Collapse>
 
                             <Collapse in={!addNewPatient}>
-                                <div id="existing-patient-appointment">
+                                <div id="existing-appUser-appointment">
                                     <Form.Label>Pacijent</Form.Label>
                                     <Form.Select
                                         value={formData.patientId}
                                         onChange={(e) => setField("patientId", e.target.value)}
                                     >
-                                        {patients.map((patient, index) => {
+                                        {patients.map((appUser, index) => {
                                             return (<option key={index}
-                                                            value={patient.id}>{patient.firstName + " " + patient.lastName}</option>)
+                                                            value={appUser.id}>{appUser.firstName + " " + appUser.lastName}</option>)
                                         })}
                                     </Form.Select>
                                 </div>

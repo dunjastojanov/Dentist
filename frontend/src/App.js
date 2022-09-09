@@ -8,7 +8,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LoginView/>}/>
-          <Route path="/patient/:id" element={<PatientView/>}/>
+          <Route path="/appUser/:id" element={<PatientView/>}/>
           <Route path="/dentist" element={<DentistView/>}/>
         </Routes>
       </Router>

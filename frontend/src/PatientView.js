@@ -71,7 +71,8 @@ export function PatientView() {
             minute: formData.time.substring(3, 5),
             duration: formData.duration,
             type: formData.type,
-            patientId: id
+            patientId: id,
+            password: formData.password
         }
 
         axios.post(backlink + "appointment/add", dto).then(res => {
@@ -85,7 +86,7 @@ export function PatientView() {
     const [showError, setShowError] = useState(false);
     const [show, setShow] = useState(false);
 
-    let allowed = localStorage.getItem("type") === "patient" && localStorage.getItem("id") === id;
+    let allowed = localStorage.getItem("role") === "patient" && localStorage.getItem("id") === id;
 
     let html = <>
         <div className="d-flex p-3" style={{

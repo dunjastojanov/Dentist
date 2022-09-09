@@ -12,7 +12,6 @@ import {NewPatientForm} from "./NewPatientForm";
 
 export function LoginView() {
     
-    const [showDentistLogin, setShowDentistLogin] = useState(false);
     const [show, setShow] = useState(false);
     const [showError, setShowError] = useState(false);
 
@@ -43,7 +42,8 @@ export function LoginView() {
             lastName: formData.lastName,
             jmbg: formData.jmbg,
             lbo: formData.lbo,
-            email: formData.email
+            email: formData.email,
+            password: formData.password
         }
 
         axios.post(backlink + "appointment/addWithNewPatient", dto).then(res => {
@@ -61,29 +61,25 @@ export function LoginView() {
         })
     }
 
-    const loginAsDentist = () => {
+
+    const login = () => {
         let dto= {
+            email: formData.email,
             password: formData.password
         }
 
-        axios.post(backlink+"login/dentist", dto).then(res=>{
-            localStorage.setItem("type", "dentist");
-            window.location.href = frontlink + "dentist"
-        }).catch(err=> {
-            console.log(err);
-        })
-    }
-
-    const loginAsPatient = () => {
-        let dto= {
-            jmbg: formData.jmbg,
-            lbo: formData.lbo
-        }
-
-        axios.post(backlink+"login/patient", dto).then(res=>{
-            localStorage.setItem("type", "patient");
+        axios.post(backlink+"login/user", dto).then(res=>{
+            localStorage.setItem("jwt", res.data.jwt);
+            localStorage.setItem("role", res.data.role);
             localStorage.setItem("id", res.data.id);
-            window.location.href = frontlink + "patient/" + res.data.id
+
+            if (res.data.role === "dentist") {
+                window.location.href = frontlink + "dentist/"
+            }
+            else {
+                window.location.href = frontlink + "patient/" + res.data.id
+            }
+
         }).catch(err=> {
             console.log(err);
         })
@@ -94,22 +90,22 @@ export function LoginView() {
             <div className="banner d-flex flex-column justify-content-center align-items-center w-100">
                 <h1>Prijava</h1>
             </div>
-            {!showDentistLogin &&
+
                 <Form className="center-form d-flex flex-column">
                     <Form.Group>
-                        <Form.Label>JMBG</Form.Label>
-                        <Form.Control type="text"
-                                      placeholder="Unesite JMBG"
-                                      value={formData.jmbg}
-                                      onChange={(e)=>setField("jmbg", e.target.value)}/>
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control type="email"
+                                      placeholder="Unesite Email"
+                                      value={formData.email}
+                                      onChange={(e)=>setField("email", e.target.value)}/>
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>LBO</Form.Label>
-                        <Form.Control type="text"
-                                      placeholder="Unesite LBO"
-                                      value={formData.lbo}
-                                      onChange={(e)=>setField("lbo", e.target.value)}
+                        <Form.Label>Lozinka</Form.Label>
+                        <Form.Control type="password"
+                                      placeholder="Unesite lozinku"
+                                      value={formData.password}
+                                      onChange={(e)=>setField("password", e.target.value)}
                         />
                     </Form.Group>
 
@@ -117,39 +113,14 @@ export function LoginView() {
                         <Button variant="link" onClick={()=>setShow(true)}>
                             Prvi put si kod nas? Zakaži svoj prvi termin!
                         </Button>
-                        <Button variant="primary" onClick={()=>loginAsPatient()} className="ms-auto">
+                        <Button variant="primary" onClick={()=>login()} className="ms-auto">
                             Prijavi se
-                        </Button>
-                        <Button variant="primary" className="ms-2" onClick={()=>setShowDentistLogin(true)}>
-                            Prijavi se kao zubar
                         </Button>
                     </div>
 
                 </Form>
             
-            }
-            {showDentistLogin &&
-                <Form className="center-form d-flex flex-column">
 
-                    <Form.Group>
-                        <Form.Label>Lozinka</Form.Label>
-                        <Form.Control type="password"
-                                      value={formData.password}
-                                      onChange={(e)=>setField("password", e.target.value)}/>
-                    </Form.Group>
-
-                    <div className="d-flex btn-footer">
-                        <Button variant="primary" onClick={()=>loginAsDentist()}>
-                            Prijavi se
-                        </Button>
-                        <Button variant="primary" className="ms-2" onClick={()=>setShowDentistLogin(false)}>
-                            Prijavi se kao pacijent
-                        </Button>
-                    </div>
-
-                </Form>
-
-            }
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Novi termin</Modal.Title>

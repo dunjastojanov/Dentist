@@ -1,7 +1,7 @@
 package com.interview.dentist.appointment;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.interview.dentist.patient.Patient;
+import com.interview.dentist.user.AppUser;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,25 +27,25 @@ public class Appointment {
     private String type;
 
     @OneToOne
-    private Patient patient;
+    private AppUser appUser;
 
 
     public Appointment() {
     }
 
-    public Appointment(Long id, LocalDateTime startTime, int duration, String type, Patient patient) {
+    public Appointment(Long id, LocalDateTime startTime, int duration, String type, AppUser appUser) {
         this.id = id;
         this.startTime = startTime;
         this.duration = duration;
         this.type = type;
-        this.patient = patient;
+        this.appUser = appUser;
     }
 
-    public Appointment(LocalDateTime startTime, int duration, String type, Patient patient) {
+    public Appointment(LocalDateTime startTime, int duration, String type, AppUser appUser) {
         this.startTime = startTime;
         this.duration = duration;
         this.type = type;
-        this.patient = patient;
+        this.appUser = appUser;
     }
 
     public String getType() {
@@ -80,11 +80,11 @@ public class Appointment {
         this.duration = duration;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public AppUser getPatient() {
+        return appUser;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatient(AppUser appUser) {
+        this.appUser = appUser;
     }
 }

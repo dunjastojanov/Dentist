@@ -10,7 +10,7 @@ export function NewPatientForm({formData, setFormData}) {
         })
     }
 
-    return (<div id="new-patient-appointment">
+    return (<div id="new-appUser-appointment">
         <Form.Group>
             <Form.Label>Ime</Form.Label>
             <Form.Control type="text"
@@ -40,6 +40,13 @@ export function NewPatientForm({formData, setFormData}) {
             <Form.Control type="email"
                           value={formData.email}
                           onChange={(e) => setField("email", e.target.value)}></Form.Control>
+        </Form.Group>
+
+        <Form.Group>
+            <Form.Label>Lozinka</Form.Label>
+            <Form.Control type="password"
+                          value={formData.password}
+                          onChange={(e) => setField("password", e.target.value)}></Form.Control>
         </Form.Group>
 
     </div>)
